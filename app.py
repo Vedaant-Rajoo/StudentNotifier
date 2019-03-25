@@ -3,9 +3,9 @@ from wtforms import Form, StringField, PasswordField, validators
 from pymongo import MongoClient
 
 app=Flask(__name__)
-client = MongoClient('mongodb+srv://vedaant:vedaant123@studentnotifier-fx3dd.gcp.mongodb.net/test?retryWrites=true')
+client = MongoClient('mongodb+srv://paras:paras@studentnotifier-fx3dd.gcp.mongodb.net/test?retryWrites=true')
+db = client['studentnotifier']
 users = ["admin", "dean","test"]
-password = "1234"
 
 
 
@@ -22,14 +22,29 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/notice')
+@app.route('/notice',methods=['POST','GET'])
 def notice():
-    if 'username' in session:
-        username = session['username']
-        return render_template("notice.html", user=username)
-    else:
-        return "You are not logged in <br><a href = '/login'></b>" + \
-      "click here to log in</b></a>"
+    if request.method == "GET":
+        if 'username' in session:
+            username = session['username']
+            return render_template("notice.html", user=username)
+        else:
+            return "You are not logged in <br><a href = '/login'></b>" + \
+        "click here to log in</b></a>"
+    elif request.method == "POST":
+        title = request.form['title']
+        category =  request.form['category']
+        body =  request.form['body']
+        obj = {
+            "title": title,
+            "category": category,
+            "body": body
+        }
+        print(title,category,body)
+        db.notice.insert_one(obj)
+        return redirect(url_for('notice'))
+
+
 
 @app.route('/dashboard')
 def dashboard():
@@ -71,8 +86,7 @@ def logout():
 
 # database configs 
 
-db = client['test-database']
-collection = db['test-collection']
+
 
 
 # running on the server 
