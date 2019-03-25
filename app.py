@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash , redirect, url_for, session, logging, request
 from wtforms import Form, StringField, PasswordField, validators
-from pymongo import *
+from pymongo import MongoClient
 
 app=Flask(__name__)
 client = MongoClient('mongodb+srv://vedaant:vedaant123@studentnotifier-fx3dd.gcp.mongodb.net/test?retryWrites=true')
