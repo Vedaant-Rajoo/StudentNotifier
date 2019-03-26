@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash , redirect, url_for, session, logging, request
+from flask import Flask, jsonify, render_template, flash , redirect, url_for, session, logging, request
 from wtforms import Form, StringField, PasswordField, validators
 from pymongo import MongoClient
 
@@ -59,6 +59,9 @@ def dashboard():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    if 'username' in session:
+        username = session['username']
+        return redirect(url_for('dashboard'))
     if request.method == 'POST':
         username=request.form['username']
         Password=request.form['password']
@@ -74,7 +77,7 @@ def login():
         print(username, Password)
 
 
-    return render_template('login1.html')
+    return render_template('what.html')
 
 @app.route('/logout')
 def logout():
@@ -82,11 +85,20 @@ def logout():
    session.pop('username', None)
    return redirect(url_for('index'))
 
+@app.route('/getAllNotices')
+def getAllNotices():
+   notices = db.notice.find()
+   arr = []
+   for notice in notices:
+       notice['_id'] = str(notice['_id'])
+       arr.append(notice)
+   print(arr)
+
+   return jsonify(arr)
+
 
 
 # database configs 
-
-
 
 
 # running on the server 
