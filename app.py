@@ -100,8 +100,8 @@ def getAllNotices():
 
 # database configs 
 
-
+app.secret_key='secret123'
 # running on the server 
 if __name__ == '__main__':
-    app.secret_key='secret123'
+    
     app.run(debug=True)
