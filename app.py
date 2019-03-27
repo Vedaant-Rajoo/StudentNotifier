@@ -102,6 +102,3 @@ def getAllNotices():
 
 app.secret_key='secret123'
 # running on the server 
-if __name__ == '__main__':
-    
-    app.run(debug=True)
